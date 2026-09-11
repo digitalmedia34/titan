@@ -2,6 +2,8 @@
 
 Use with role: `SOL_REVIEWER`
 
+Inspect the acceptance-to-verification evidence in the active plan. Required FAIL or NOT_RUN cannot become PASS_WITH_NOTES. Apply WORKFLOW's state transitions after the review: accept only when criteria and gates are satisfied; for repairs amend the active plan, preserve completed evidence, mark READY only when executable, and require re-review. Record bounded takeover work and verification if SOL retains implementation.
+
 ```text
 Review the implementation LUNA produced against the original active SOL
 plan.

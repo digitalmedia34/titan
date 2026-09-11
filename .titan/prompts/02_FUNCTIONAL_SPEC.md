@@ -37,3 +37,5 @@ docs/PROJECT_SPEC.md
 ```
 
 After USER approval, `docs/PROJECT_SPEC.md` becomes the business/functional baseline.
+
+Read the saved discovery summary in `docs/PROJECT_INTAKE.md` alongside current USER decisions. Resolve contradictions explicitly. After baseline approval, intake remains a historical discovery record rather than a second maintained specification.

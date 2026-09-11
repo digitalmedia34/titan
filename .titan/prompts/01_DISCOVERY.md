@@ -54,3 +54,7 @@ Do not create detailed LUNA tasks yet.
 ```
 
 After discovery, update `.titan/STATE.md` to the USER gate for functional specification.
+
+Persist a concise discovery summary in `docs/PROJECT_INTAKE.md` after meaningful decisions and before a pause or handoff: CONFIRMED, OPEN DECISIONS, PROPOSED MVP, DEFERRED, and NEXT DISCOVERY FOCUS. Update the summary, not a conversation transcript. USER input remains optional; SOL maintains the summary even when the idea was given in chat.
+
+At the discovery gate use PHASE_STATUS: WAITING, GATE: DISCOVERY_EXIT, WAITING_FOR: USER_APPROVAL. On approval move to 02_FUNCTIONAL_SPEC with SOL_ARCHITECT and the functional-spec prompt in READ_NEXT; clear the resolved gate and wait.

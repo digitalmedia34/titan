@@ -2,6 +2,8 @@
 
 Use with role: `SOL_REVIEWER`
 
+Verify connected user journeys and relevant permission/data-integrity boundaries using concrete commands or manual procedures. Record PASS / FAIL / NOT_RUN and evidence. Reuse still-valid earlier evidence; repeat earlier checks only when changes or unresolved risks justify it. Required FAIL/NOT_RUN prevents CHECKPOINT PASS.
+
 ```text
 Review the completed related modules as one functional system.
 

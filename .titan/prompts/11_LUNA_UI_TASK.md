@@ -4,6 +4,8 @@ Use with role: `LUNA_IMPLEMENTER`
 
 A clear UI brief is required for non-trivial visual changes.
 
+Record the brief's required checks as PASS / FAIL / NOT_RUN with concrete evidence, including relevant keyboard/accessibility behavior. If required browser verification is unavailable, report NOT_RUN and its consequence instead of claiming visual completion; follow the workflow prerequisite/blocker rule.
+
 ```text
 Implement the UI/UX change according to the active UI brief.
 

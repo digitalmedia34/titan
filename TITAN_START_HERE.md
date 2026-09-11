@@ -10,6 +10,8 @@ The goal is for the **repository itself to carry the operating rules, current st
 
 ## Central philosophy
 
+Designed for experienced Codex/model users developing medium and large web applications. Standard and short task plans share the same control rules; choose their size according to task risk and complexity.
+
 > Brainstorm broadly.  
 > Decide precisely.  
 > Stabilize architecture before serious implementation.  
@@ -99,6 +101,8 @@ NEXT_ACTION: Create a detailed plan for PHASE-04.
 ```
 
 After SOL creates the plan:
+
+SOL marks the plan READY and specifies review requirements and concrete acceptance checks before handoff. The lifecycle and state transitions are defined in `.titan/WORKFLOW.md`.
 
 ```text
 EXPECTED_ROLE: LUNA_IMPLEMENTER

@@ -18,6 +18,10 @@ Do not load unrelated methodology files unless they are needed.
 
 ## Before coding
 
+- start only a READY plan, or resume an authorized IN_PROGRESS plan; DRAFT and unresolved BLOCKED plans are not executable;
+- set the plan IN_PROGRESS when execution begins and follow the workflow transition table at handoffs;
+- local implementation choices consistent with locked decisions (for example variable naming) do not require escalation; changes to access rules, data models, or locked behavior do.
+
 - understand the current step;
 - inspect existing project patterns;
 - establish relevant baseline checks if the plan requests them;
@@ -113,6 +117,10 @@ Protect:
 - existing working interactions unrelated to the task.
 
 ## What LUNA may update
+
+LUNA also maintains the active plan's execution status and verification evidence. Mark IMPLEMENTED only after required checks pass. Mark ACCEPTED only when REVIEW_REQUIRED is NO, the plan permits closure, criteria pass, and no USER gate remains; otherwise hand off to SOL_REVIEWER with WAITING_FOR: SOL_REVIEW. Preserve ACTIVE_PLAN until acceptance.
+
+Record each check as PASS, FAIL, or NOT_RUN, with the actual command/procedure and result. Required FAIL/NOT_RUN prevents completion; use the workflow blocker procedure when unresolved. The completion report describes execution, not module acceptance.
 
 LUNA may update:
 

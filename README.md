@@ -8,6 +8,8 @@
 
 Its purpose is simple:
 
+TITAN is intended for experienced Codex and model users building medium and large web applications, with controlled progress across sessions and model handoffs.
+
 > Use stronger reasoning where decisions matter, then hand clearly prepared work to efficient implementation models.
 
 TITAN keeps the methodology **inside the repository** so Codex sessions can quickly understand:
@@ -262,8 +264,8 @@ A special thank you to AlenM for being there throughout the journey and for the 
 
 ## Status
 
-**TITAN v1.0.1** is the current public release.
+**TITAN v1.0.2** is the current release.
 
-The TITAN methodology remains based on the original v1.0.0 operational baseline. Version 1.0.1 adds npm distribution and the TITAN CLI initializer.
+Version 1.0.1 added npm distribution and the CLI initializer. Version 1.0.2 adds explicit plan/state transitions, persistent discovery summaries, proportionate STANDARD/SHORT plans, and verification evidence tied to acceptance. See `TITAN_VERSION.md` for changes and existing-project migration guidance.
 
 The methodology should evolve from real project evidence, not from theoretical complexity.

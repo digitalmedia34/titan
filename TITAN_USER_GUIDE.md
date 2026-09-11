@@ -2,6 +2,17 @@
 
 This file is for the human project owner.
 
+TITAN targets experienced Codex/model users managing medium and large web applications.
+
+## Version 1.0.2 operating changes
+
+- SOL saves discovery conclusions in PROJECT_INTAKE; after specification approval it remains historical context.
+- SOL chooses STANDARD or SHORT task plans according to risk. Both require readiness, explicit review requirements, and concrete acceptance checks. This does not introduce a separate small-project workflow.
+- READY plans can enter implementation within existing approved boundaries without an extra approval gate. DRAFT plans cannot execute.
+- IMPLEMENTED means the implementation and required checks passed. ACCEPTED also requires any mandatory review and approval. See WORKFLOW for exact state transitions.
+- Checks report PASS, FAIL, or NOT_RUN. An unavailable required check remains visible and prevents completion until resolved; a local pass is not production verification.
+- Existing users should merge the changes described in TITAN_VERSION rather than overwrite populated project documents with starter placeholders.
+
 ## 1. How to use the starter
 
 Extract/copy the TITAN starter files into the **root of a new project or repository**.

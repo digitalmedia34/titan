@@ -2,6 +2,8 @@
 
 Use with role: `SOL_REVIEWER`
 
+Trace MVP/MUST criteria to implementation and actual verification evidence. Required FAIL/NOT_RUN prevents readiness; list each missing check and consequence as blocking. Local readiness does not mean production verification or authorize deployment.
+
 ```text
 The application is functionally implemented.
 

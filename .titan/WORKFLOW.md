@@ -176,6 +176,25 @@ NEXT_ACTION: Inspect current repository and create a just-in-time implementation
 
 ## Step B — SOL creates the just-in-time plan
 
+### Plan size and readiness
+
+Use the STANDARD layout in `.titan/templates/MODULE_PLAN_TEMPLATE.md` for new modules, interconnected changes, or significant risk. Use its SHORT layout only for local, well-defined LOW-risk tasks within an approved project. SHORT is not allowed for permissions/auth changes, destructive migrations, key business rules, or architectural decisions. Both layouts use the same lifecycle and evidence rules.
+
+Work already explicitly covered by the active plan needs no separate plan or handoff. Existing low-risk UI and known-cause bug exceptions still apply; they do not bypass strategic gates or required checks.
+
+The plan owns its `STATUS` and `REVIEW_REQUIRED: YES / NO`, with a concrete `REVIEW_REASON`. SOL decides the review requirement using Step E; it cannot waive a required review by choosing SHORT.
+
+| Plan status | Meaning / owner |
+| --- | --- |
+| DRAFT | SOL is preparing the plan; execution is not allowed. |
+| READY | SOL inspected current code, resolved material decisions, and specified checks and acceptance criteria. |
+| IN_PROGRESS | The implementer is executing the authorized steps. |
+| BLOCKED | A concrete conflict or unmet prerequisite prevents continuation. |
+| IMPLEMENTED | Implementation and required checks passed; required acceptance/review may still be pending. |
+| ACCEPTED | Acceptance criteria and every required review and approval are satisfied. |
+
+SOL may mark a plan READY without another USER approval when it stays within approved scope, specification, and architecture. Otherwise resolve the existing strategic gate first. A model switch is not approval of scope changes.
+
 **Prompt:** `.titan/prompts/06_SOL_PLAN_FOR_LUNA.md`
 
 SOL must inspect:
@@ -193,6 +212,7 @@ The plan must be detailed enough that LUNA mainly executes instead of making imp
 
 After plan creation:
 
+- mark the plan `READY` only after the readiness conditions above are met;
 - set `EXPECTED_ROLE: LUNA_IMPLEMENTER`;
 - set `ACTIVE_PLAN`;
 - set `NEXT_ACTION` to the first step/checkpoint.
@@ -266,6 +286,47 @@ When acceptance criteria and required review are satisfied:
 - clear `ACTIVE_PLAN`;
 - select the next module.
 
+### State and handoff contract
+
+`.titan/STATE.md` navigates; the active plan owns detailed execution evidence. Update both at meaningful transitions, not after every edit. Keep `READ_NEXT` limited to the next role, relevant prompt, active plan, and necessary project sources. Keep completed plans as evidence after clearing `ACTIVE_PLAN`.
+
+State field vocabulary:
+
+- `PHASE_STATUS`: READY, IN_PROGRESS, WAITING, BLOCKED, COMPLETE (status of the current phase, not an individual plan).
+- `WAITING_FOR`: NONE, USER_APPROVAL, SOL_REVIEW, SOL_DECISION, EXTERNAL_PREREQUISITE. Put the concrete prerequisite or decision in `BLOCKERS` and `NEXT_ACTION`.
+- `GATE`: NONE, DISCOVERY_EXIT, SPEC_BASELINE, ARCHITECTURE_BASELINE, ARCHITECTURE_CHANGES, IMPLEMENTATION_BASELINE, SCOPE_CHANGE, PLAN_STOP, PRODUCTION_DEPLOYMENT, PRODUCTION_SIGN_OFF. Required approvals follow AGENTS.md; any explicit delegation must be recorded with its scope.
+- `PLAN_CHECKPOINT`: NONE or the last completed named step/checkpoint. Keep it through repairs so completed work is not restarted; clear it when selecting a new plan.
+
+| Event | Plan status | State / next action |
+| --- | --- | --- |
+| SOL hands off a ready plan | READY | Phase IN_PROGRESS; LUNA_IMPLEMENTER; waiting NONE; gate NONE; execute first allowed step. |
+| LUNA starts or resumes | IN_PROGRESS | Waiting NONE; gate NONE; execute next allowed step. |
+| Planned STOP with checks passed | IN_PROGRESS | Phase WAITING; LUNA_IMPLEMENTER; USER_APPROVAL; PLAN_STOP; name completed checkpoint and next step. |
+| USER approves that STOP | IN_PROGRESS | Phase IN_PROGRESS; waiting NONE; gate NONE; continue without replanning unless materially changed. |
+| Material conflict | BLOCKED | Phase BLOCKED; SOL_REVIEWER; SOL_DECISION; describe conflict and required decision; preserve any unresolved gate. |
+| Required check cannot run | BLOCKED | Phase BLOCKED; EXTERNAL_PREREQUISITE (or SOL_DECISION if a plan decision is needed); record NOT_RUN, cause, consequence, and resume action. |
+| Implementation and checks pass; review required | IMPLEMENTED | Phase WAITING; SOL_REVIEWER; SOL_REVIEW; retain active plan and request review. |
+| SOL returns PASS / PASS_WITH_NOTES | ACCEPTED if criteria and gates are satisfied | Record non-blocking notes; close the plan/module as applicable. Notes cannot disguise failed or missing required checks. |
+| SOL returns REPAIR_REQUIRED | BLOCKED until repair is READY | SOL amends the active plan with repair steps and checks, then hands it back READY to LUNA. Preserve completed evidence and require re-review. |
+| SOL returns SOL_TAKEOVER | IN_PROGRESS once decisions/gates permit | SOL_REVIEWER (or SOL_DEBUGGER for root-cause work); waiting NONE; specify bounded repair and required verification. Existing review requirements remain. |
+| No review required and all criteria pass | ACCEPTED | LUNA may close only when the plan permits closure and no USER gate remains. |
+
+After acceptance, if more plans remain in the module, select the next task without declaring the module complete. When the module is complete, update STATUS and select the next module. Clear ACTIVE_PLAN and PLAN_CHECKPOINT, set SOL_PLANNER and the next planning action; the implementation phase stays IN_PROGRESS. When the roadmap is complete, move to the scheduled integration/final review instead. Set the overall phase COMPLETE only when that phase's work is finished.
+
+A failed check is FAIL, not NOT_RUN. LUNA may repair failures within the plan; if unable to resolve them within scope, use the conflict handoff. After an external prerequisite is restored, recheck relevant assumptions and resume the uncompleted work; an unresolved strategic gate still requires approval.
+
+### Evidence required for acceptance
+
+SOL links each acceptance criterion to a concrete verification method. Select checks according to the change and risk: denied access/tenant isolation, data integrity under failure, connected user journeys, error states, and relevant responsive/accessibility behavior. Not every category applies to every task; do not add unrelated checks.
+
+For each required check, record the command or manual procedure, expected behavior, actual result, and evidence location when useful:
+
+- PASS: executed and met the expected behavior.
+- FAIL: executed and did not meet the expected behavior.
+- NOT_RUN: not executed; state the reason and consequence.
+
+A required FAIL or NOT_RUN prevents IMPLEMENTED/ACCEPTED. SOL may specify an equivalent check with rationale; it must actually run and pass. Removing a required acceptance obligation needs the approval required for that requirement; it is never an implicit waiver. Keep automated, browser/manual, and production evidence distinct. Reports may be concise and reference the plan instead of duplicating logs.
+
 ---
 
 # 07_INTEGRATION_CHECKPOINTS
@@ -284,6 +345,8 @@ Focus:
 - technical debt that becomes expensive if postponed.
 
 Do not use this for cosmetic refactor suggestions.
+
+Verify connected flows with concrete evidence. Reuse prior evidence where it remains valid; repeat checks when integration changes, failures, or unresolved risks justify it, not automatically every earlier test.
 
 ---
 

@@ -27,3 +27,24 @@ UNSET
 
 ## ADDITIONAL CONTEXT
 ...
+
+## DISCOVERY SUMMARY
+
+Maintained by SOL after meaningful conclusions and before a pause/handoff. This is a concise current summary, not a transcript or a mandatory USER questionnaire.
+
+### CONFIRMED
+- ...
+
+### OPEN DECISIONS
+- ...
+
+### PROPOSED MVP
+- ...
+
+### DEFERRED
+- ...
+
+### NEXT DISCOVERY FOCUS
+- ...
+
+After PROJECT_SPEC is approved, it owns the functional baseline. Retain this discovery record for context; do not maintain it as a parallel specification.

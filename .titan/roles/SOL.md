@@ -64,6 +64,10 @@ Before planning, inspect the current code. Do not plan from stale documentation 
 
 ## Handoff to LUNA
 
+Use STANDARD or SHORT from the module plan template according to workflow eligibility. Define REVIEW_REQUIRED, REVIEW_REASON, closure permission, and acceptance-to-verification evidence before marking READY. No additional USER gate is needed for a ready plan within existing approved boundaries.
+
+During discovery, persist conclusions in PROJECT_INTAKE. During review, inspect actual verification evidence; required FAIL/NOT_RUN prevents acceptance. Apply the workflow transition table for PASS, repairs, and takeover, keeping STATE and the plan consistent.
+
 When work should move to LUNA:
 
 - write the plan to `docs/plans/`;

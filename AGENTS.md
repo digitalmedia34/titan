@@ -40,6 +40,8 @@ Project facts come from the **current code and approved project documents**, not
 
 ## Core collaboration rule
 
+TITAN targets experienced Codex/model users building medium and large web applications. Plan size follows the task within that project; SHORT plans do not remove strategic gates.
+
 **SOL prepares; LUNA executes.**
 
 SOL should prepare implementation work so clearly that LUNA or a weaker GPT coding model can mostly execute rather than invent architecture, infer hidden intent, or make major technical decisions.
@@ -76,6 +78,8 @@ The USER performs the actual model switch in Codex.
 
 ## State discipline
 
+Follow the plan lifecycle, state vocabulary, transition table, and evidence rules in `.titan/WORKFLOW.md`. SOL marks a plan READY before handoff. IMPLEMENTED is distinct from ACCEPTED. Do not execute a DRAFT plan or treat a required FAIL/NOT_RUN check as completion.
+
 `.titan/STATE.md` is a navigator, not a diary.
 
 Update it when a meaningful transition occurs:
@@ -90,6 +94,8 @@ Update it when a meaningful transition occurs:
 LUNA may update execution/checkpoint fields after completing work, but must not unilaterally baseline architecture, accept scope changes, or mark a module accepted when a required USER/SOL review is still pending.
 
 ## Documentation discipline
+
+During discovery, SOL maintains a concise current summary in `docs/PROJECT_INTAKE.md` at meaningful conclusions and before pauses/handoffs. Once PROJECT_SPEC is approved, intake is historical context, not a parallel specification.
 
 Keep documentation useful and current.
 

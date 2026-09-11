@@ -2,6 +2,8 @@
 
 Use with role: `LUNA_IMPLEMENTER`
 
+Apply WORKFLOW's readiness, state transition, and evidence rules. Start READY or authorized IN_PROGRESS work only. Record required checks as PASS / FAIL / NOT_RUN with actual results; missing required verification prevents completion. IMPLEMENTED means checks passed, not that required SOL review is complete. Preserve the plan for that review and only close it under the plan's closure permission.
+
 ```text
 Implement the ACTIVE_PLAN from .titan/STATE.md.
 

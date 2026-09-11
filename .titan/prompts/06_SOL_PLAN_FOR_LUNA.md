@@ -4,6 +4,8 @@ Use with role: `SOL_PLANNER`
 
 This is the core daily handoff prompt.
 
+Use `.titan/templates/MODULE_PLAN_TEMPLATE.md`: select STANDARD or eligible SHORT according to WORKFLOW Step B. Fill REVIEW_REQUIRED, REVIEW_REASON, and IMPLEMENTER_MAY_CLOSE. Link acceptance criteria to concrete required verification methods and expected behavior. Read relevant document sections; do not load unrelated project context.
+
 ```text
 The active module/task from docs/MASTER_PLAN.md is now ready.
 
@@ -74,6 +76,7 @@ Do not implement the task.
 
 After creating the plan:
 
+- mark it READY only after current-code inspection, material decisions, and verification requirements are complete; a DRAFT cannot be handed off for execution;
 - update `.titan/STATE.md`;
 - set `EXPECTED_ROLE: LUNA_IMPLEMENTER`;
 - set `ACTIVE_PLAN`;
