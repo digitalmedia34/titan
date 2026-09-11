@@ -1,0 +1,30 @@
+{
+  "name": "@netelite/titan",
+  "version": "1.0.1",
+  "description": "Technical Intelligence, Tasking & AI Navigation - a Codex AI development methodology by NETELITE.",
+  "license": "MIT",
+  "bin": {
+    "titan": "bin/titan.js"
+  },
+  "files": [
+    "bin",
+    "AGENTS.md",
+    "TITAN_START_HERE.md",
+    "TITAN_USER_GUIDE.md",
+    "TITAN_VERSION.md",
+    "LICENSE",
+    ".titan",
+    "docs"
+  ],
+  "keywords": [
+    "codex",
+    "openai",
+    "ai-development",
+    "ai-coding",
+    "development-workflow",
+    "prompt-engineering"
+  ],
+  "engines": {
+    "node": ">=18"
+  }
+}

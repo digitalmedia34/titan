@@ -129,9 +129,14 @@ TITAN/
 │
 ├── AGENTS.md
 ├── README.md
+├── LICENSE
 ├── TITAN_START_HERE.md
 ├── TITAN_USER_GUIDE.md
 ├── TITAN_VERSION.md
+├── package.json
+│
+├── bin/
+│   └── titan.js
 │
 ├── .titan/
 │   ├── STATE.md
@@ -177,10 +182,28 @@ TITAN/
 
 ## Quick start
 
-1. Copy the TITAN starter files into the root of a new Codex project/repository.
-2. Open the repository in Codex.
-3. Select **SOL**.
-4. Start with:
+### Install with npm
+
+Create or open the directory where you want to initialize your project:
+
+```bash
+mkdir my-project
+cd my-project
+```
+
+Initialize TITAN:
+
+```bash
+npx -y @netelite/titan@latest
+```
+
+TITAN adds its methodology files directly to the current directory. It is not installed as a runtime dependency of your application.
+
+Then:
+
+1. Open the project directory in Codex.
+2. Select **SOL**.
+3. Start with:
 
 ```text
 Start this project using the TITAN methodology.
@@ -189,7 +212,7 @@ Idea:
 <describe the project in your own words>
 ```
 
-The fresh starter begins in:
+The fresh TITAN setup begins in:
 
 ```text
 PHASE: 01_DISCOVERY
@@ -197,6 +220,10 @@ EXPECTED_ROLE: SOL_DISCOVERY
 ```
 
 SOL should therefore begin discovery instead of coding.
+
+### Manual installation
+
+Alternatively, download the **TITAN Starter ZIP** from the GitHub Releases page and extract it into the root of your project.
 
 ---
 
@@ -225,8 +252,18 @@ TITAN does **not** automatically switch models.
 
 ---
 
+## Acknowledgements
+
+TITAN was built with a lot of late nights, experiments, and persistence.
+
+A special thank you to AlenM for being there throughout the journey and for the constant support and encouragement.
+
+---
+
 ## Status
 
-**TITAN v1.0** is the first public operational baseline of the methodology.
+**TITAN v1.0.1** is the current public release.
+
+The TITAN methodology remains based on the original v1.0.0 operational baseline. Version 1.0.1 adds npm distribution and the TITAN CLI initializer.
 
 The methodology should evolve from real project evidence, not from theoretical complexity.

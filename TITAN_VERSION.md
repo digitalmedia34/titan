@@ -1,7 +1,7 @@
 # TITAN
 
 NAME: Technical Intelligence, Tasking & AI Navigation  
-VERSION: 1.0  
+VERSION: 1.0.1
 DEVELOPED_BY: NETELITE
 STATUS: Initial public operational baseline  
 TARGET: OpenAI Codex workflows  
