@@ -1,0 +1,166 @@
+# TITAN v1.0 — USER Guide
+
+This file is for the human project owner.
+
+## 1. How to use the starter
+
+Extract/copy the TITAN starter files into the **root of a new project or repository**.
+
+You should see:
+
+```text
+AGENTS.md
+README.md
+TITAN_START_HERE.md
+TITAN_USER_GUIDE.md
+.titan/
+docs/
+```
+
+Then open the repository in Codex.
+
+## 2. First message
+
+Use SOL and write something as simple as:
+
+```text
+Start this project according to the TITAN methodology.
+
+Idea:
+<describe the project in your own words>
+```
+
+Or fill in `docs/PROJECT_INTAKE.md` first and say:
+
+```text
+Start the project according to TITAN.
+The initial context is in docs/PROJECT_INTAKE.md.
+```
+
+The project begins in Discovery.
+
+## 3. What happens next
+
+Normal strategic flow:
+
+```text
+SOL Discovery
+→ PROJECT_SPEC
+→ SOL Architecture
+→ optional ASTRA review
+→ Master Plan
+→ implementation loop
+```
+
+Do not manually create dozens of LUNA tasks at the beginning.
+
+The Master Plan defines the strategic roadmap. Detailed implementation plans are created only when a module actually reaches the front of the queue.
+
+## 4. Normal implementation loop
+
+When the state expects `SOL_PLANNER`, use SOL and say:
+
+```text
+Continue according to TITAN.
+```
+
+SOL inspects the actual repository and creates a detailed plan in `docs/plans/`.
+
+When SOL changes state to `LUNA_IMPLEMENTER`, switch to LUNA and say:
+
+```text
+Continue according to the active plan.
+```
+
+LUNA implements.
+
+If LUNA reaches a planned STOP and everything passes, you can often say only:
+
+```text
+Continue.
+```
+
+No new SOL planning is needed unless the plan or real project state changed.
+
+## 5. When LUNA reports a blocker
+
+Switch to SOL.
+
+Say:
+
+```text
+Review the blocker according to TITAN and decide how we should continue.
+```
+
+SOL should inspect the real conflict and either:
+
+- amend the plan;
+- create a repair plan;
+- take over the difficult part.
+
+## 6. When to use ASTRA
+
+Do not use ASTRA by habit.
+
+Use ASTRA when a foundational architecture/specification decision is:
+
+- unusually complex;
+- high-risk;
+- expensive to reverse;
+- highly interconnected.
+
+Typical instruction:
+
+```text
+Run the ASTRA critical review according to TITAN.
+```
+
+Then return to USER + SOL to decide which findings are accepted.
+
+## 7. UI work
+
+For meaningful UI changes:
+
+- create a brief from `.titan/templates/UI_BRIEF.md`;
+- include screenshots/annotations when useful;
+- be explicit about `DO NOT CHANGE`;
+- distinguish desktop and mobile.
+
+LUNA can implement many UI tasks directly when intent is sufficiently clear.
+
+## 8. Deployment
+
+Local PASS is not production verification.
+
+Before deployment, switch to SOL and say:
+
+```text
+Prepare the production deployment according to TITAN for the current
+production environment.
+```
+
+Review backup/rollback and approve the actual deployment.
+
+## 9. Five commands worth remembering
+
+```text
+Start the project according to TITAN.
+Continue according to TITAN.
+Continue according to the active plan.
+Review the blocker according to TITAN.
+Move to the next module according to the Master Plan.
+```
+
+The repository should carry the rest of the procedure.
+
+## 10. What TITAN is not
+
+TITAN v1.0 is not:
+
+- an automatic multi-agent runtime;
+- an automatic model switcher;
+- a replacement for Git, tests, backups, or deployment discipline;
+- permission for an AI model to make destructive production changes without approval;
+- a guarantee that every project should use the same software architecture.
+
+TITAN is a **development methodology encoded into the repository** so Codex collaboration remains consistent across sessions and GPT models.
