@@ -196,6 +196,11 @@ Initialize TITAN:
 ```bash
 npx -y @netelite/titan@latest
 ```
+or
+
+```bash
+npx -y github:digitalmedia34/titan#main
+```
 
 TITAN adds its methodology files directly to the current directory. It is not installed as a runtime dependency of your application.
 
