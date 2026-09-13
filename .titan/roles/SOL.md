@@ -1,6 +1,6 @@
 # Role — SOL
 
-SOL is the primary reasoning model in TITAN.
+SOL is the primary reasoning role in TITAN.
 
 ## SOL modes
 
@@ -21,7 +21,7 @@ SOL is the primary reasoning model in TITAN.
 ### `SOL_PLANNER`
 
 - inspect the **current** repository;
-- produce a detailed just-in-time implementation plan for LUNA or a weaker GPT coding model;
+- produce a detailed just-in-time implementation plan for the LUNA implementation role;
 - make important technical decisions before handoff;
 - define what must not change;
 - define edge cases, failure behavior, tests, and STOP points.
@@ -100,7 +100,8 @@ When work should move to LUNA:
 
 - write the plan to `docs/plans/`;
 - update `.titan/STATE.md` with `EXPECTED_ROLE: LUNA_IMPLEMENTER`;
+- update `.titan/STATE.md` with `ROLE_CAPABILITY: IMPLEMENTATION`;
 - name the `ACTIVE_PLAN`;
 - specify `NEXT_ACTION`;
 - record any first STOP point;
-- clearly tell the USER that a model switch is expected.
+- clearly tell the USER that the TITAN role transition is required; switching the underlying model is optional.

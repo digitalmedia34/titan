@@ -12,7 +12,7 @@ This is application-code-read-only work. Inspect/search code and run existing no
 The active module/task from docs/MASTER_PLAN.md is now ready.
 
 Inspect the real current state of the project and create a detailed
-implementation plan for LUNA or a slightly weaker GPT coding model.
+implementation plan for the LUNA implementation role.
 
 Before writing the plan, inspect all relevant:
 
@@ -33,7 +33,7 @@ Before writing the plan, inspect all relevant:
 Do not assume the real project is identical to plans written earlier.
 The current code must be verified.
 
-Make the plan detailed enough that LUNA or a weaker model mainly
+Make the plan detailed enough that the LUNA implementation role mainly
 executes instead of:
 
 - guessing what you meant;
@@ -87,6 +87,7 @@ After creating the plan:
 - mark it READY only after current-code inspection, material decisions, and verification requirements are complete; a DRAFT cannot be handed off for execution;
 - update `.titan/STATE.md`;
 - set `EXPECTED_ROLE: LUNA_IMPLEMENTER`;
+- set `ROLE_CAPABILITY: IMPLEMENTATION`;
 - set `ACTIVE_PLAN`;
 - set the first `NEXT_ACTION`;
 - record any first STOP checkpoint.

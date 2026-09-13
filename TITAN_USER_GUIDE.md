@@ -4,7 +4,7 @@ This file is for the human project owner.
 
 TITAN targets experienced AI-assisted development users managing medium and large web applications.
 
-## Version 1.0.2 operating changes
+## Version 1.2.0 operating changes
 
 - SOL saves discovery conclusions in PROJECT_INTAKE; after specification approval it remains historical context.
 - SOL chooses STANDARD or SHORT task plans according to risk. Both require readiness, explicit review requirements, and concrete acceptance checks. This does not introduce a separate small-project workflow.
@@ -166,7 +166,7 @@ The repository should carry the rest of the procedure.
 
 ## 10. What TITAN is not
 
-TITAN v1.0 is not:
+TITAN is not:
 
 - an automatic multi-agent runtime;
 - an automatic model switcher;

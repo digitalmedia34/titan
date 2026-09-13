@@ -6,7 +6,6 @@ This repository uses **TITAN — Technical Intelligence, Tasking & AI Navigation
 - SOL — discovery, architecture, planning, review, complex debugging, and deployment planning;
 - ASTRA — optional critical/challenge reviewer for unusually complex or risky decisions;
 - LUNA — implementation responsibility for well-prepared work;
-- ASTRA — optional independent critical/challenge review responsibility.
 
 ## Mandatory startup sequence
 

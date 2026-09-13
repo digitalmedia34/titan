@@ -37,6 +37,7 @@ Skip optional work when it adds no value, but do not skip required reasoning gat
 ## 01_DISCOVERY
 
 **Default role:** `SOL_DISCOVERY`  
+**Role capability:** `REASONING`
 **Prompt:** `.titan/prompts/01_DISCOVERY.md`
 
 Purpose:
@@ -66,6 +67,7 @@ Next:
 ## 02_FUNCTIONAL_SPEC
 
 **Default role:** `SOL_ARCHITECT`  
+**Role capability:** `REASONING`
 **Prompt:** `.titan/prompts/02_FUNCTIONAL_SPEC.md`
 
 Output:
@@ -90,6 +92,7 @@ Next:
 ## 03_ARCHITECTURE
 
 **Default role:** `SOL_ARCHITECT`  
+**Role capability:** `REASONING`
 **Prompt:** `.titan/prompts/03_SOL_ARCHITECTURE.md`
 
 Output:
@@ -111,6 +114,7 @@ Decision:
 ## 04_ARCHITECTURE_REVIEW — OPTIONAL
 
 **Default role:** `ASTRA_CRITICAL_REVIEW`  
+**Role capability:** `CRITICAL_REVIEW`
 **Prompt:** `.titan/prompts/04_ASTRA_CRITICAL_REVIEW.md`
 
 ASTRA does not redesign the system merely because it prefers another style.
@@ -135,6 +139,7 @@ Next:
 ## 05_MASTER_PLAN
 
 **Default role:** `SOL_ARCHITECT`  
+**Role capability:** `REASONING`
 **Prompt:** `.titan/prompts/05_MASTER_PLAN.md`
 
 Output:
@@ -357,6 +362,7 @@ A required FAIL or NOT_RUN prevents IMPLEMENTED/ACCEPTED. SOL may specify an equ
 # 07_INTEGRATION_CHECKPOINTS
 
 **Role:** `SOL_REVIEWER`  
+**Role capability:** `REASONING`
 **Prompt:** `.titan/prompts/09_INTEGRATION_CHECKPOINT.md`
 
 Use after a meaningful group of interdependent modules or when the Master Plan calls for it.
@@ -426,6 +432,7 @@ No scope creep.
 # 09_PRE_DEPLOY
 
 **Role:** `SOL_DEPLOY`  
+**Role capability:** `REASONING`
 **Prompt:** `.titan/prompts/12_SOL_PRE_DEPLOY.md`
 
 Plan:

@@ -1,6 +1,6 @@
 # Role — LUNA
 
-LUNA is the primary implementation model in TITAN.
+LUNA is the primary implementation role in TITAN.
 
 Your role is to **execute well-prepared work accurately**, not to redesign the system.
 
@@ -62,7 +62,7 @@ DECISION NEEDED:
 ...
 ```
 
-Update state to indicate `BLOCKED` and `EXPECTED_ROLE: SOL_REVIEWER` when a SOL decision is required.
+Update state to indicate `BLOCKED`, `EXPECTED_ROLE: SOL_REVIEWER`, and `ROLE_CAPABILITY: REASONING` when a SOL decision is required.
 
 ## Checkpoints
 

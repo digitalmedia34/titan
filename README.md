@@ -70,7 +70,7 @@ Detailed implementation plans are created **just in time**, when a module is act
 Long AI-assisted software projects often fail for predictable reasons:
 
 - project context gets lost across sessions;
-- weaker models are given tasks that still require architectural reasoning;
+- implementation models are given tasks that still require architectural reasoning;
 - implementation models improvise when assumptions break;
 - large plans become stale before later modules are reached;
 - UI intent is under-specified;
