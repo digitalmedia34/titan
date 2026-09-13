@@ -199,11 +199,9 @@ npx -y @netelite/titan@latest
 
 TITAN adds its methodology files directly to the current directory. It is not installed as a runtime dependency of your application.
 
-Then:
+Then open the project directory in Codex, GitHub Copilot, or another supported AI coding environment. The environment should read `.github/copilot-instructions.md` when available, then follow `AGENTS.md`, `.titan/STATE.md`, and the active role instructions.
 
-1. Open the project directory in Codex, GitHub Copilot, or another supported AI coding environment.
-2. Allow TITAN to determine the initial role from `.titan/STATE.md`.
-3. Start with:
+Start with:
 
 ```text
 Start this project using the TITAN methodology.
@@ -217,9 +215,36 @@ The fresh TITAN setup begins in:
 ```text
 PHASE: 01_DISCOVERY
 EXPECTED_ROLE: SOL_DISCOVERY
+ROLE_CAPABILITY: REASONING
 ```
 
 SOL should therefore begin discovery instead of coding.
+
+### Codex
+
+Open the repository in Codex and send:
+
+```text
+Start this project according to the TITAN methodology.
+
+Idea:
+<describe the project in your own words>
+```
+
+Codex follows the role and next action declared in `.titan/STATE.md`. If the state later changes to `LUNA_IMPLEMENTER`, continue according to the active plan; changing the underlying model is optional.
+
+### GitHub Copilot
+
+Open the repository in an environment where GitHub Copilot repository instructions are available. Copilot reads `.github/copilot-instructions.md`, which directs it to the authoritative `AGENTS.md`, TITAN state, role file, and `READ_NEXT` documents.
+
+Start with:
+
+```text
+Start this project according to the TITAN methodology.
+Follow the role and next action specified by .titan/STATE.md.
+```
+
+For an existing project, preserve populated project documents and active plans. Merge TITAN methodology changes rather than replacing project-specific state or specifications.
 
 ### Manual installation
 
@@ -241,6 +266,57 @@ Move to the next module according to the Master Plan.
 ```
 
 The repository should carry the detailed process.
+
+## Usage examples
+
+### Begin discovery
+
+```text
+Start the project according to TITAN.
+The initial context is in docs/PROJECT_INTAKE.md.
+```
+
+The active state is `SOL_DISCOVERY` with `ROLE_CAPABILITY: REASONING`, so the AI should ask focused discovery questions and must not begin coding.
+
+### Create an implementation plan
+
+After the implementation baseline is approved, the state may identify a module for planning:
+
+```text
+Continue according to TITAN.
+```
+
+When `EXPECTED_ROLE: SOL_PLANNER`, SOL inspects the real repository and creates a just-in-time plan. A `DRAFT` plan must not be executed.
+
+### Implement an approved plan
+
+When state contains `EXPECTED_ROLE: LUNA_IMPLEMENTER`, `ROLE_CAPABILITY: IMPLEMENTATION`, and an active ready plan:
+
+```text
+Continue according to the active plan.
+```
+
+The LUNA role implements, tests, respects STOP checkpoints, and stops when the plan no longer matches reality. `SOL prepares; LUNA executes.`
+
+### Handle a blocker
+
+If implementation encounters a material conflict:
+
+```text
+Review the blocker according to TITAN.
+```
+
+The state should move to `SOL_REVIEWER` with `ROLE_CAPABILITY: REASONING`. The reviewer determines the root cause and next safe action rather than improvising.
+
+### Request independent critical review
+
+For unusually complex or risky decisions:
+
+```text
+Run the ASTRA critical review according to TITAN.
+```
+
+The state should identify `ASTRA_CRITICAL_REVIEW` with `ROLE_CAPABILITY: CRITICAL_REVIEW`. ASTRA challenges serious omissions and risks; USER and SOL decide which findings are accepted.
 
 ---
 
