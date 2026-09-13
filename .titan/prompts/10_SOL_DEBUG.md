@@ -22,7 +22,7 @@ First determine:
 Only after the cause is understood:
 
 - if the fix is sufficiently well-defined, create a detailed repair plan
-  for LUNA or a weaker GPT model;
+  for the LUNA implementation role;
 - if the fix requires complex reasoning during implementation, keep the
   bounded implementation with SOL, record `SOL_TAKEOVER` and required
   verification, and complete it in the assigned debugging/repair role.

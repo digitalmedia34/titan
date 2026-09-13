@@ -3,10 +3,10 @@
   "version": "1.2.0",
   "description": "Technical Intelligence, Tasking & AI Navigation - a provider-neutral AI-assisted and agentic coding methodology by NETELITE.",
   "license": "MIT",
-  "homepage": "https://github.com/netelite/titan",
+  "homepage": "https://github.com/digitalmedia34/titan",
   "repository": {
     "type": "git",
-    "url": "https://github.com/netelite/titan.git"
+    "url": "https://github.com/digitalmedia34/titan.git"
   },
   "bin": {
     "titan": "bin/titan.js"
