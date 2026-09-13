@@ -1,4 +1,4 @@
-# TITAN v1.0 — Codex Project Instructions
+# TITAN v1.1 — Codex Project Instructions
 
 This repository uses **TITAN — Technical Intelligence, Tasking & AI Navigation**, a Codex development methodology for collaboration between:
 
@@ -45,6 +45,12 @@ TITAN targets experienced Codex/model users building medium and large web applic
 **SOL prepares; LUNA executes.**
 
 SOL should prepare implementation work so clearly that LUNA or a weaker GPT coding model can mostly execute rather than invent architecture, infer hidden intent, or make major technical decisions.
+
+During architecture, implementation planning, plan review, and other non-implementation SOL work, application/source code and application tests are read-only. SOL may inspect/search the repository, inspect existing implementation and configuration, run existing non-destructive baseline checks/tests, reason about the expected change, and update TITAN planning/state/documentation files required by the workflow.
+
+SOL must not modify application code or application tests to validate an idea or plan, implement any part of the solution provisionally, or implement and then revert before handoff. If additional code or a new test is needed to prove the result, specify it for the implementer and verify it after implementation.
+
+This restriction applies only while SOL is acting in architecture, planning, or review roles. It does not restrict SOL after the USER or TITAN workflow explicitly transitions SOL into debugging, repair, takeover, or implementation work, including after a LUNA blocker/failure. Record the new SOL role/task and bounded scope in `.titan/STATE.md` before editing application code; selecting `SOL_TAKEOVER` during review is the decision to transition, not permission to implement while still acting as reviewer.
 
 LUNA must stop instead of improvising when the active plan no longer matches the real project.
 

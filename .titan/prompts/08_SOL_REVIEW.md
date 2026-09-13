@@ -2,7 +2,9 @@
 
 Use with role: `SOL_REVIEWER`
 
-Inspect the acceptance-to-verification evidence in the active plan. Required FAIL or NOT_RUN cannot become PASS_WITH_NOTES. Apply WORKFLOW's state transitions after the review: accept only when criteria and gates are satisfied; for repairs amend the active plan, preserve completed evidence, mark READY only when executable, and require re-review. Record bounded takeover work and verification if SOL retains implementation.
+Inspect the acceptance-to-verification evidence in the active plan. Required FAIL or NOT_RUN cannot become PASS_WITH_NOTES. Apply WORKFLOW's state transitions after the review: accept only when criteria and gates are satisfied; for repairs amend the active plan, preserve completed evidence, mark READY only when executable, and require re-review. If SOL must retain implementation, record the proposed bounded takeover scope and verification before changing roles.
+
+This review is application-code-read-only. Inspect the implementation and run existing non-destructive checks as needed, but do not modify application code/tests, implement a fix provisionally, or implement and revert to validate the review. Put required changes and missing tests in the repair plan for LUNA. If the result is `SOL_TAKEOVER`, first move from `SOL_REVIEWER` to `SOL_DEBUGGER` (or another explicitly assigned SOL repair/implementation role) and record the bounded scope. SOL may then modify and test application code within that new task; it must not implement while still acting as `SOL_REVIEWER`.
 
 ```text
 Review the implementation LUNA produced against the original active SOL

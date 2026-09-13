@@ -264,8 +264,8 @@ A special thank you to AlenM for being there throughout the journey and for the 
 
 ## Status
 
-**TITAN v1.0.2** is the current release.
+**TITAN v1.1.0** is the current release.
 
-Version 1.0.1 added npm distribution and the CLI initializer. Version 1.0.2 adds explicit plan/state transitions, persistent discovery summaries, proportionate STANDARD/SHORT plans, and verification evidence tied to acceptance. See `TITAN_VERSION.md` for changes and existing-project migration guidance.
+Version 1.1.0 formalizes application-code-read-only SOL planning/review roles, explicit debugging/repair/takeover transitions, and the SOL → LUNA plan-detail boundary. See `TITAN_VERSION.md` for the current changes and existing-project migration guidance.
 
 The methodology should evolve from real project evidence, not from theoretical complexity.

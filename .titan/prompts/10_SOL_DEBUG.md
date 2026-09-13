@@ -2,6 +2,8 @@
 
 Use with role: `SOL_DEBUGGER`
 
+This is an explicit SOL debugging/repair role, so the planning/review code-read-only restriction does not apply. When assigned by the USER or workflow after a LUNA blocker/failure, SOL may inspect, modify, test, and repair application code within the bounded task recorded in `.titan/STATE.md`. Establish the root cause before making a major fix and preserve the existing safety, verification, and review requirements.
+
 ```text
 Investigate this bug before attempting any major fix.
 
@@ -22,7 +24,8 @@ Only after the cause is understood:
 - if the fix is sufficiently well-defined, create a detailed repair plan
   for LUNA or a weaker GPT model;
 - if the fix requires complex reasoning during implementation, keep the
-  implementation with SOL.
+  bounded implementation with SOL, record `SOL_TAKEOVER` and required
+  verification, and complete it in the assigned debugging/repair role.
 
 Do not perform a large refactor when the bug can be fixed safely with a
 smaller change.

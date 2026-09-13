@@ -204,11 +204,13 @@ SOL must inspect:
 - current approved documents;
 - current tests.
 
+Planning inspection is application-code-read-only. SOL may run existing non-destructive baseline tests/checks and update the plan, state, and required TITAN documentation. SOL must not change application code/tests, implement provisionally, or implement and revert to validate the plan. Any new implementation or test needed for proof belongs in the plan for LUNA and is verified afterward.
+
 Output:
 
 - `docs/plans/<phase_or_task>.md`
 
-The plan must be detailed enough that LUNA mainly executes instead of making important architectural or technical decisions.
+The plan must be detailed enough that LUNA mainly executes instead of making important architectural or technical decisions. It defines WHAT / WHERE / WHY / CONSTRAINTS / HOW TO VERIFY while LUNA writes the implementation. Avoid line-by-line code unless exact syntax/code is required for correctness, compatibility, security, or an approved interface.
 
 After plan creation:
 
@@ -265,6 +267,8 @@ Use SOL review when:
 - LUNA was blocked or materially deviated;
 - an integration checkpoint is reached.
 
+Review is application-code-read-only. SOL may inspect the implementation and run existing non-destructive checks, but it must not fix code/tests, perform a provisional implementation, or implement and revert while deciding the review outcome. Required changes and missing tests go into the repair plan for LUNA unless the workflow first records an explicit SOL takeover.
+
 Prompt:
 
 - `.titan/prompts/08_SOL_REVIEW.md`
@@ -308,7 +312,7 @@ State field vocabulary:
 | Implementation and checks pass; review required | IMPLEMENTED | Phase WAITING; SOL_REVIEWER; SOL_REVIEW; retain active plan and request review. |
 | SOL returns PASS / PASS_WITH_NOTES | ACCEPTED if criteria and gates are satisfied | Record non-blocking notes; close the plan/module as applicable. Notes cannot disguise failed or missing required checks. |
 | SOL returns REPAIR_REQUIRED | BLOCKED until repair is READY | SOL amends the active plan with repair steps and checks, then hands it back READY to LUNA. Preserve completed evidence and require re-review. |
-| SOL returns SOL_TAKEOVER | IN_PROGRESS once decisions/gates permit | SOL_REVIEWER (or SOL_DEBUGGER for root-cause work); waiting NONE; specify bounded repair and required verification. Existing review requirements remain. |
+| SOL returns SOL_TAKEOVER | IN_PROGRESS after the role/task transition is recorded | Before any application code change, move from SOL_REVIEWER to SOL_DEBUGGER (or another explicitly assigned SOL repair/implementation role), set waiting NONE, and record the bounded repair and required verification. SOL may then modify and test application code within that scope. Existing review requirements remain. |
 | No review required and all criteria pass | ACCEPTED | LUNA may close only when the plan permits closure and no USER gate remains. |
 
 After acceptance, if more plans remain in the module, select the next task without declaring the module complete. When the module is complete, update STATUS and select the next module. Clear ACTIVE_PLAN and PLAN_CHECKPOINT, set SOL_PLANNER and the next planning action; the implementation phase stays IN_PROGRESS. When the roadmap is complete, move to the scheduled integration/final review instead. Set the overall phase COMPLETE only when that phase's work is finished.
@@ -376,6 +380,8 @@ Goal:
 
 - establish root cause before repair planning;
 - avoid blind iteration.
+
+The planning/review read-only restriction does not apply after the workflow explicitly assigns SOL debugging, repair, takeover, or implementation work. After a LUNA blocker/failure, `SOL_DEBUGGER` may inspect, modify, test, and repair application code within the bounded task recorded in `.titan/STATE.md`. If SOL retains implementation because it requires continuous high-level reasoning, record `SOL_TAKEOVER`, the SOL role/task, repair scope, and required verification before editing.
 
 ---
 

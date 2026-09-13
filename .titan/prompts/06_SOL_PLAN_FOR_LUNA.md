@@ -6,6 +6,8 @@ This is the core daily handoff prompt.
 
 Use `.titan/templates/MODULE_PLAN_TEMPLATE.md`: select STANDARD or eligible SHORT according to WORKFLOW Step B. Fill REVIEW_REQUIRED, REVIEW_REASON, and IMPLEMENTER_MAY_CLOSE. Link acceptance criteria to concrete required verification methods and expected behavior. Read relevant document sections; do not load unrelated project context.
 
+This is application-code-read-only work. Inspect/search code and run existing non-destructive baseline checks as needed, but do not modify application code/tests, implement provisionally, or implement and revert to validate the plan. Update only the required TITAN plan/state/documentation files. Any new implementation or test needed for proof belongs in the plan for LUNA.
+
 ```text
 The active module/task from docs/MASTER_PLAN.md is now ready.
 
@@ -68,6 +70,12 @@ architecture independently.
 
 Be as detailed as necessary, but do not fill the plan with trivial
 framework mechanics.
+
+Define WHAT must change, WHERE, WHY, locked constraints and expected
+behavior, edge cases, HOW TO VERIFY, and STOP conditions. LUNA writes
+the implementation. Do not turn the plan into line-by-line code unless
+exact syntax/code is required for correctness, compatibility, security,
+or an already-approved interface; state that reason when it applies.
 
 Save the plan under docs/plans/ with a clear name.
 

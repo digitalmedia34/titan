@@ -1,4 +1,4 @@
-# TITAN v1.0 — USER Guide
+# TITAN v1.1 — USER Guide
 
 This file is for the human project owner.
 

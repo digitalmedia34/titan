@@ -12,6 +12,8 @@ IMPLEMENTER_MAY_CLOSE: YES / NO (only if no required review or USER gate remains
 Use one layout below, not both. Replace alternatives and placeholders before READY.
 Status lifecycle and handoffs: `.titan/WORKFLOW.md`, Step B and State and handoff contract.
 
+Planning is application-code-read-only. Describe WHAT / WHERE / WHY / CONSTRAINTS / HOW TO VERIFY; LUNA writes the implementation. Do not use provisional implementation to prepare the plan. Avoid line-by-line code unless exact syntax/code is required for correctness, compatibility, security, or an approved interface; state the reason when used.
+
 ## SHORT layout (LOW-risk local tasks only)
 
 Not for permissions/auth, destructive migrations, key business rules, or architecture changes.

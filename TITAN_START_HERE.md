@@ -1,4 +1,4 @@
-# TITAN v1.0 — Start Here
+# TITAN v1.1 — Start Here
 
 ## What is TITAN?
 
