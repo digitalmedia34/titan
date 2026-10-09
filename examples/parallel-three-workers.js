@@ -18,7 +18,7 @@ async function main() {
     async run({ task, worktreePath, onLog }) {
       const marker = path.join(worktreePath, `parallel-demo-${task.id}.txt`);
       await fs.writeFile(marker, `${task.id}: isolated worktree\n`, { flag: 'wx' });
-      onLog?.({ stream: 'stdout', text: `wrote ${path.basename(marker)}\n` });
+      onLog?.('wrote ' + path.basename(marker));
       return { exitCode: 0, output: `created ${marker}` };
     },
   };
