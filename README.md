@@ -348,3 +348,7 @@ A special thank you to AlenM for being there throughout the journey and for the 
 Version 1.2.0 adds first-class GitHub Copilot repository instructions, provider-neutral TITAN roles, role capability tracking, and optional model switching while preserving Codex compatibility and the existing methodology. See `TITAN_VERSION.md` for current changes and existing-project migration guidance.
 
 The methodology should evolve from real project evidence, not from theoretical complexity.
+
+## Optional parallel implementation
+
+TITAN Parallel adds opt-in, dependency-aware worker execution while preserving the normal serial workflow. Read [`docs/PARALLEL_WORK.md`](docs/PARALLEL_WORK.md) for coordinator and worker rules, and [`docs/PARALLEL_CLI.md`](docs/PARALLEL_CLI.md) for the Node CLI, task file, adapters, state, logs, and worktree lifecycle.

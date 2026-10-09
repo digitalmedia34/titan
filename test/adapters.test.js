@@ -9,7 +9,7 @@ const test = require('node:test');
 const assert = require('node:assert/strict');
 const path = require('node:path');
 
-const task = { id: 'worker-a', instructions: 'Update only the assigned module.', acceptanceCriteria: ['No cross-worker writes'], globalState: 'secret coordinator state', siblingWorktrees: ['../worker-b'] };
+const task = { id: 'worker-a', instructions: 'Update only the assigned module.', owns: ['src/assigned.js'], readOnly: ['docs/architecture.md'], lockedDecisions: ['Keep the existing API'], stopConditions: ['If the API contract conflicts'], acceptanceCriteria: ['No cross-worker writes'], globalState: 'secret coordinator state', siblingWorktrees: ['../worker-b'] };
 
 for (const [name, createAdapter, command] of [
   ['Codex', createCodexAdapter, 'codex'],
@@ -29,9 +29,21 @@ for (const [name, createAdapter, command] of [
     const prompt = name === 'Codex' ? invocation.args.at(-1) : invocation.args[1];
     assert.match(prompt, /worker-a/);
     assert.match(prompt, /No cross-worker writes/);
+    assert.match(prompt, /src\/assigned.js/);
+    assert.match(prompt, /Keep the existing API/);
+    assert.match(prompt, /If the API contract conflicts/);
     assert.doesNotMatch(prompt, /secret coordinator state|worker-b/);
-    if (name === 'Codex') assert.deepEqual(invocation.args.slice(0, 4), ['exec', '--full-auto', '--cd', worktreePath]);
-    else assert.deepEqual(invocation.args.slice(0, 1), ['-p']);
+    if (name === 'Codex') assert.deepEqual(invocation.args.slice(0, 7), ['exec', '--sandbox', 'workspace-write', '--ask-for-approval', 'never', '--cd', worktreePath]);
+    else {
+      assert.deepEqual(invocation.args.slice(0, 1), ['-p']);
+      assert.ok(invocation.args.includes('--allow-tool=write,shell'));
+      assert.ok(invocation.args.includes('--deny-tool=shell(git push)'));
+      assert.ok(invocation.args.includes('--deny-tool=shell(git merge)'));
+      assert.ok(invocation.args.includes('--deny-tool=shell(npm publish)'));
+      assert.ok(invocation.args.includes('--deny-tool=shell(azd up)'));
+      assert.ok(invocation.args.includes('--deny-tool=shell(terraform apply)'));
+      assert.ok(invocation.args.includes('--no-ask-user'));
+    }
     assert.deepEqual(result, { exitCode: 0, output: 'worker output' });
     assert.deepEqual(logs, ['worker output']);
   });
@@ -51,7 +63,7 @@ test('process runner captures output, streams logs and resolves the exit code', 
 });test('process adapter executes the task-selected command in its isolated worktree', async () => {
   let invocation;
   const adapter = createProcessAdapter({ runCommand: async (options) => { invocation = options; return { exitCode: 0, output: 'ok' }; } });
-  const result = await adapter.run({ task: { ...task, command: 'fake-worker', commandArgs: ['--quiet'] }, worktreePath: 'worktrees/process-worker', attempt: 1 });
+  const result = await adapter.run({ task: { ...task, command: 'fake-worker', commandArgs: ['--quiet'], appendPrompt: true }, worktreePath: 'worktrees/process-worker', attempt: 1 });
   assert.equal(adapter.id, 'process');
   assert.equal(invocation.command, 'fake-worker');
   assert.deepEqual(invocation.args.slice(0, 1), ['--quiet']);

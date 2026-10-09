@@ -26,11 +26,15 @@ ASTRA may independently challenge a high-risk decision when called for by the no
 
 `.titan/STATE.md` on the coordinator's integration branch is the single authoritative project state. Workers read it as a snapshot and do not race to update it.
 
+Coordinator-owned TITAN state and planning documents, including `.titan/**`, `docs/STATUS.md`, `docs/DECISIONS.md`, `docs/MASTER_PLAN.md`, `docs/PROJECT_INTAKE.md`, `docs/PROJECT_SPEC.md`, and `docs/ARCHITECTURE.md`, are not worker write targets.
+
 Each contract carries worker execution status and evidence in its own plan/run record. Suggested statuses are `DRAFT`, `READY`, `IN_PROGRESS`, `BLOCKED`, `IMPLEMENTED`, and `ACCEPTED`, using the existing meanings and evidence rules in `.titan/WORKFLOW.md`. A worker can report `IMPLEMENTED`; only the coordinator applies integration/review outcomes and closes combined work. These per-contract states supplement, and never override, project phase or active plan status.
 
 The coordinator keeps a concise run ledger: contract ID, assigned worker and branch, dependencies, status, latest commit, check results, and blockers. Keep logs out of `.titan/STATE.md`; it remains a navigator. Update shared state at meaningful transitions and point to contracts/ledger as appropriate.
 
 ## Scheduling and integration
+
+The CLI requires a non-empty repository-relative `owns` list, rejects coordinator state paths, and rejects overlapping ownership unless one task depends on the other.
 
 1. SOL records task dependencies as a directed acyclic graph. Work starts only after its declared prerequisites reach the required checkpoint.
 2. Concurrent tasks must have non-overlapping write sets and no dependency on unfinished decisions or outputs. Shared configuration, schemas, public interfaces, and lockfiles are conflicts unless explicitly assigned to one task with downstream dependencies.
@@ -43,6 +47,8 @@ The coordinator keeps a concise run ledger: contract ID, assigned worker and bra
 ## Task contract
 
 Use `.titan/templates/PARALLEL_TASK_CONTRACT.md` for each worker task. IDs are stable within a run. `OWNS` lists paths the worker may change; `READ_ONLY` lists relevant inputs. An empty or ambiguous write set means the task is not READY. Every contract names its dependencies, locked decisions, checks, STOP conditions, and handoff evidence.
+
+For the Node CLI, task JSON format, adapter setup, state/log locations, and worktree lifecycle, see [`PARALLEL_CLI.md`](PARALLEL_CLI.md).
 
 ## Example: three independent tasks
 

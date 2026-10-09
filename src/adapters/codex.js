@@ -8,7 +8,7 @@ function createCodexAdapter(options = {}) {
   return { id: 'codex', async run({ task, worktreePath, attempt = 1, onLog, signal }) {
     if (!worktreePath) throw new TypeError('worktreePath is required');
     const cwd = path.resolve(worktreePath);
-    return run({ command, args: ['exec', '--full-auto', '--cd', cwd, taskPrompt(task, attempt)], cwd, onLog, signal, spawnProcess: options.spawnProcess });
+    return run({ command, args: ['exec', '--sandbox', 'workspace-write', '--ask-for-approval', 'never', '--cd', cwd, taskPrompt(task, attempt)], cwd, onLog, signal, spawnProcess: options.spawnProcess });
   } };
 }
 module.exports = { createCodexAdapter };

@@ -14,7 +14,9 @@ function createProcessAdapter(options = {}) {
       const extraArgs = task.commandArgs || [];
       if (!Array.isArray(extraArgs) || extraArgs.some((arg) => typeof arg !== 'string')) throw new TypeError('task.commandArgs must be an array of strings');
       const cwd = path.resolve(worktreePath);
-      return run({ command, args: [...extraArgs, taskPrompt(task, attempt)], cwd, onLog, signal, spawnProcess: options.spawnProcess });
+      const args = [...extraArgs];
+      if (task.appendPrompt === true) args.push(taskPrompt(task, attempt));
+      return run({ command, args, cwd, onLog, signal, spawnProcess: options.spawnProcess });
     },
   };
 }
