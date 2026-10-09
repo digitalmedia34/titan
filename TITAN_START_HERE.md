@@ -153,3 +153,7 @@ EXPECTED_ROLE: SOL_DISCOVERY
 SOL should use `.titan/prompts/01_DISCOVERY.md`.
 
 Do not begin coding.
+
+## Optional parallel implementation
+
+For independent implementation work, see `docs/PARALLEL_WORK.md` and use `.titan/templates/PARALLEL_TASK_CONTRACT.md`. Parallel execution is opt-in; the ordinary TITAN workflow remains the default. Shared project state, role boundaries, approval gates, and STOP rules still apply.

@@ -12,6 +12,7 @@
     "titan": "bin/titan.js"
   },
   "files": [
+    "src",
     "bin",
     ".github",
     "AGENTS.md",
@@ -36,5 +37,9 @@
   ],
   "engines": {
     "node": ">=18"
-  }
+  },
+  "scripts": {
+    "test": "node --test"
+  },
+  "types": "src/parallel/index.d.ts"
 }

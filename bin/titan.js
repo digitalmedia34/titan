@@ -1,5 +1,11 @@
 #!/usr/bin/env node
 
+if (process.argv[2] === 'parallel') {
+    require('../src/parallel/cli');
+    return;
+}
+
+
 const fs = require('fs');
 const path = require('path');
 

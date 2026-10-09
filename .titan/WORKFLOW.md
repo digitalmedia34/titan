@@ -481,3 +481,5 @@ The project can be marked complete when:
 - documentation/state are current.
 
 Do not interpret COMPLETE as “no future improvements exist”.
+
+Parallel implementation is optional. When used, follow `docs/PARALLEL_WORK.md` and `.titan/templates/PARALLEL_TASK_CONTRACT.md`; this does not change the existing gates, role authority, or plan lifecycle.

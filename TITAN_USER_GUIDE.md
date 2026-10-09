@@ -185,3 +185,7 @@ TITAN is not:
 Commercial model names may change over time. TITAN role names are durable workflow concepts: role transition is mandatory, while model transition is optional. STATE controls roles; model choice is an implementation detail.
 
 TITAN is a **development methodology encoded into the repository** so Codex, GitHub Copilot, and other supported AI coding environments remain consistent across sessions and model choices.
+
+## Optional parallel implementation
+
+For independent tasks, SOL may prepare separate READY contracts and assign isolated LUNA workers. Follow `docs/PARALLEL_WORK.md` and `.titan/templates/PARALLEL_TASK_CONTRACT.md`. This is opt-in; all existing TITAN roles, approvals, checks, and stop conditions remain in force.
