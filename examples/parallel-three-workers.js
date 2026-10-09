@@ -3,7 +3,8 @@
 // Safe integration example: the coordinator still creates real isolated Git
 // worktrees, while this adapter simulates provider work without invoking an AI CLI.
 const fs = require('node:fs/promises');
-const path = require('node:path');\nconst os = require('node:os');
+const path = require('node:path');
+const os = require('node:os');
 const { runParallel } = require('../src/parallel');
 
 async function main() {
