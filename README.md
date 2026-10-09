@@ -349,6 +349,125 @@ Version 1.2.0 adds first-class GitHub Copilot repository instructions, provider-
 
 The methodology should evolve from real project evidence, not from theoretical complexity.
 
-## Optional parallel implementation
+## Optional parallel workflow: start a new project
 
-TITAN Parallel adds opt-in, dependency-aware worker execution while preserving the normal serial workflow. Read [`docs/PARALLEL_WORK.md`](docs/PARALLEL_WORK.md) for coordinator and worker rules, and [`docs/PARALLEL_CLI.md`](docs/PARALLEL_CLI.md) for the Node CLI, task file, adapters, state, logs, and worktree lifecycle.
+Parallel work is an implementation option, not a shortcut around TITAN. Start every new project with the normal discovery, specification, architecture, and approval gates. Introduce workers only after the scope is understood and SOL has prepared implementation tasks that can be carried out independently.
+
+### 1. Initialize TITAN and start discovery
+
+Create or open the project directory, initialize TITAN as described in [Quick start](#quick-start), and open that directory in Codex, GitHub Copilot, or another supported coding environment. Ask SOL to begin discovery and describe the project in your own words:
+
+```text
+Start this project according to TITAN.
+
+Idea:
+<what you want to build, who it is for, and the problem it solves>
+```
+
+Follow `.titan/STATE.md`. Do not start parallel implementation during discovery. Complete and approve the project specification, architecture, and implementation baseline through the normal TITAN gates first.
+
+### 2. Choose a small, ready set of independent tasks
+
+Ask SOL to inspect the current repository and prepare a just-in-time plan. Only split ready implementation work across workers when tasks can safely proceed at the same time. A useful first run usually has two or three tasks; increase concurrency only when the work and review capacity justify it.
+
+Give every worker a clear contract:
+
+- one unique task ID and a short, concrete outcome;
+- a specific `owns` list with no overlap between workers;
+- relevant `readOnly` paths and required context;
+- locked decisions and conditions that mean “stop and ask”;
+- testable acceptance criteria and verification commands;
+- `dependsOn` entries only when a task truly needs another task’s output.
+
+Keep shared architecture, product decisions, and `.titan/STATE.md` under coordinator control. A worker should not broaden its assignment or edit another worker’s owned files. If the repository changes enough to invalidate a task contract, stop and have SOL revise the plan before restarting workers.
+
+Save the contracts as a JSON file outside generated worker outputs, for example `parallel-tasks.json`:
+
+```json
+[
+  {
+    "id": "API-01",
+    "title": "Implement the account API",
+    "instructions": "Implement the approved account endpoints and their focused tests.",
+    "owns": ["src/accounts/", "test/accounts/"],
+    "readOnly": ["docs/ARCHITECTURE.md", "src/shared/"],
+    "requiredContext": ["docs/PROJECT_SPEC.md", "docs/plans/accounts.md"],
+    "lockedDecisions": ["Follow the approved API and authentication design"],
+    "stopConditions": ["Stop if the current code conflicts with the approved design"],
+    "acceptanceCriteria": ["Account API checks pass", "Only owned paths are changed"],
+    "verificationCommands": [
+      { "name": "account tests", "command": "npm", "args": ["test", "--", "test/accounts"] }
+    ],
+    "dependsOn": []
+  },
+  {
+    "id": "WEB-01",
+    "title": "Implement the account screens",
+    "instructions": "Implement the approved account screens using the existing shared components.",
+    "owns": ["src/account-pages/", "test/account-pages/"],
+    "readOnly": ["src/shared/", "docs/ARCHITECTURE.md"],
+    "requiredContext": ["docs/PROJECT_SPEC.md", "docs/plans/accounts.md"],
+    "lockedDecisions": ["Use the approved interaction and visual brief"],
+    "stopConditions": ["Stop if API behavior or UX intent is unclear"],
+    "acceptanceCriteria": ["Screen checks pass", "Only owned paths are changed"],
+    "dependsOn": []
+  }
+]
+```
+
+Treat this as a shape example: replace paths, commands, and criteria with ones that exist in your project. If the web work cannot proceed without API decisions or code, add a real dependency or run those tasks sequentially. Do not create artificial dependencies just to order workers.
+
+### 3. Check the repository and worker adapters
+
+Start from a clean, committed base so each worker branch has a known starting point. Review or commit your own changes first. The CLI requires Node.js 22.13 or later; TITAN initialization and the existing serial workflow retain their Node.js 18 support.
+
+Install and authenticate the provider CLIs you plan to use. Check availability before launching a run:
+
+```sh
+node bin/titan.js parallel doctor --adapter codex --adapter-module ./src/adapters/index.js
+node bin/titan.js parallel doctor --adapter copilot --adapter-module ./src/adapters/index.js
+```
+
+Codex and Copilot run under your signed-in user account. Git worktrees isolate project files and branches; they do not isolate credentials, network access, or external side effects. Copilot uses shell access and requires the explicit `--allow-copilot-shell` option. The generic process adapter is unsandboxed and requires `--allow-process-adapter`; only use it for commands you trust.
+
+### 4. Run a bounded group of workers
+
+From the repository root, choose a small concurrency limit and bounded retries. The default example uses Codex; use `--adapter copilot --allow-copilot-shell` for Copilot, or set an `adapter` on individual tasks when mixing providers.
+
+```sh
+node bin/titan.js parallel run \
+  --tasks ./parallel-tasks.json \
+  --adapter codex \
+  --adapter-module ./src/adapters/index.js \
+  --concurrency 2 \
+  --max-attempts 2 \
+  --task-timeout-ms 3600000 \
+  --base-ref HEAD
+```
+
+The coordinator creates a separate Git branch and worktree for each task, schedules dependency-ready work up to the concurrency limit, records progress, and writes per-attempt logs. A dependent worker receives successful prerequisite commits in its worktree. Failed tasks are retried only within the configured bound and from a clean task base. The coordinator does not merge worker branches into the main checkout automatically.
+
+Keep the run ID and task file. Use `parallel status` to inspect progress and `parallel resume` to continue an interrupted run with the same task file and repository. Successful tasks are skipped on resume; incomplete tasks continue within the allowed attempt count. Cancel a run with Ctrl+C when needed; running tasks are cancelled and pending tasks do not start. Inspect logs and retained worktrees before deciding how to continue.
+
+### 5. Review and integrate as the coordinator
+
+Parallel execution produces implementation work, not TITAN acceptance. For every successful worker:
+
+1. Inspect its branch, commits, diff, and log against its contract and owned paths.
+2. Run the task’s verification and any relevant security, data-integrity, accessibility, or user-flow checks.
+3. Resolve conflicts and integrate reviewed branches in dependency order. Keep integration under human/coordinator control; do not accept a worker’s completion report as a substitute for checking its changes.
+4. Run the combined project checks from the integration branch and verify cross-task behavior.
+5. Update the active plan with evidence and follow the normal SOL review, approval, and module closure steps.
+
+Keep worker branches and worktrees until their changes have been reviewed and integrated. Use `--cleanup-worktrees` only when clean worker checkouts can be removed safely; branches remain available. A successful parallel run is still only `IMPLEMENTED`, not `ACCEPTED` or deployed.
+
+### Practical tips
+
+- Parallelize file- or component-bounded tasks, not broad goals like “build the backend.”
+- Assign different files or directories to each worker. Shared files, schemas, package manifests, and central state are common conflict points.
+- Let one coordinator own architecture decisions, task contracts, integration, and updates to shared project state.
+- Use verification commands that are deterministic, narrow, and safe to run repeatedly.
+- Start with a mock demonstration if you want to learn the worktree lifecycle without launching provider agents: [`examples/parallel-three-workers.js`](examples/parallel-three-workers.js).
+- Use the serial TITAN workflow when work is tightly coupled, requirements are still changing, or coordinating and reviewing the workers would cost more than doing the work sequentially.
+
+For the full worker contract and coordinator rules, see [`docs/PARALLEL_WORK.md`](docs/PARALLEL_WORK.md). For all task fields, commands, resume behavior, adapters, logs, and worktree details, see [`docs/PARALLEL_CLI.md`](docs/PARALLEL_CLI.md).
