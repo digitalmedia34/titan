@@ -5,7 +5,7 @@ const { taskPrompt } = require('./prompt');
 function createCopilotAdapter(options = {}) {
   const command = options.command || 'copilot';
   const run = options.runCommand || runCommand;
-  return { id: 'copilot', async run({ task, worktreePath, attempt = 1, onLog, signal }) {
+  return { id: 'copilot', async check() { return run({ command, args: ['--version'], cwd: process.cwd() }); }, async run({ task, worktreePath, attempt = 1, onLog, signal }) {
     if (!worktreePath) throw new TypeError('worktreePath is required');
     const cwd = path.resolve(worktreePath);
     return run({ command, args: [

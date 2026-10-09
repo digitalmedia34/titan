@@ -52,12 +52,46 @@ node bin/titan.js parallel run \
   --adapter-module ./src/adapters/index.js \
   --concurrency 3 \
   --max-attempts 2 \
+  --task-timeout-ms 3600000 \
   --base-ref HEAD
 ```
 
 Use `--adapter copilot` to select Copilot. A task can set its own `adapter` when the run mixes providers. The adapter module exports an `adapters` map. CLI tasks use `instructions` and optional contract fields to create the provider prompt. The process adapter accepts `command` and `commandArgs`; set `appendPrompt: true` if the command expects the TITAN task prompt as a final argument.
 
 The command creates one branch and Git worktree per task. It schedules ready tasks up to the concurrency limit, retries failed tasks only up to the configured bound, and marks dependents blocked when a prerequisite fails. Worker changes remain in their branches for coordinator review; the orchestrator never merges them into the coordinator's integration branch.
+
+Each task may set `timeoutMs` and `verificationCommands`, for example:
+
+```json
+{
+  "id": "TEST-01",
+  "title": "Verify API examples",
+  "owns": ["docs/api/examples/"],
+  "timeoutMs": 900000,
+  "verificationCommands": [{ "name": "documentation checks", "command": "npm", "args": ["run", "docs:check"] }]
+}
+```
+
+Verification commands are launched directly without a shell in the task worktree. They must exit successfully before the task can succeed. `--task-timeout-ms` sets the run default; per-task `timeoutMs` overrides it. Ctrl+C and termination signals cancel active tasks and prevent pending tasks from starting. Cancelled and timed-out worktrees are retained for inspection.
+
+## Resume and status
+
+Runs persist the task contract digest, repository path, base commit, adapter settings, and per-task status in SQLite. Resume requires the same task JSON and repository path. The original task file is read again and checked against its saved digest; task instructions and command arguments are not copied into SQLite. A resume skips succeeded tasks and continues failed tasks with the next attempt number. Increase `--max-attempts` to grant additional attempts.
+
+```sh
+node bin/titan.js parallel status --run-id <run-id>
+node bin/titan.js parallel resume \
+  --run-id <run-id> \
+  --tasks ./parallel-tasks.json \
+  --adapter-module ./src/adapters/index.js \
+  --max-attempts 3
+```
+
+Provider availability can be checked without starting a worker:
+
+```sh
+node bin/titan.js parallel doctor --adapter codex --adapter-module ./src/adapters/index.js
+```
 
 When a task depends on another task, the coordinator merges successful prerequisite branch commits into its worktree before execution so downstream workers see those outputs.
 
@@ -78,6 +112,6 @@ Install and authenticate the provider CLI before assigning tasks to it:
 - Codex: `codex` CLI available on `PATH`.
 - Copilot: `copilot` CLI available on `PATH`.
 
-The Codex adapter uses the `workspace-write` sandbox and disables approval prompts for that sandboxed run. The Copilot adapter grants the write and shell tools, denies Git push and merge, package publishing, and common cloud deployment commands, and leaves its default path verification enabled. The generic `process` adapter launches `task.command` directly without an OS sandbox; use it only for commands you trust. Git worktrees isolate branch contents, while provider CLIs still run under the invoking user's account.
+The Codex adapter uses the `workspace-write` sandbox and disables approval prompts for that sandboxed run. The Copilot adapter grants the write and shell tools, denies Git push and merge, package publishing, and common cloud deployment commands, and leaves its default path verification enabled. Because Copilot receives shell access, runs using it require the explicit `--allow-copilot-shell` flag. The generic `process` adapter launches `task.command` directly without an OS sandbox and requires `--allow-process-adapter`; use it only for commands you trust. Git worktrees isolate branch contents, while provider CLIs still run under the invoking user's account.
 
 For a no-provider integration demonstration using three real isolated worktrees, run [`../examples/parallel-three-workers.js`](../examples/parallel-three-workers.js).
