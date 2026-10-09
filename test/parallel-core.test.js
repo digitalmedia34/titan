@@ -1,11 +1,16 @@
 'use strict';
 const test = require('node:test');
 const assert = require('node:assert/strict');
-const { validateTasks } = require('../src/parallel');
+const { validateTasks, ownershipPathsOverlap } = require('../src/parallel');
 
 test('accepts independent tasks and declared dependencies', () => {
   const tasks = [{ id: 'a', title: 'A', owns: ['src/a.js'] }, { id: 'b', title: 'B', owns: ['src/b.js'], dependsOn: ['a'] }];
   assert.equal(validateTasks(tasks), tasks);
+});
+test('normalizes ownership overlap with selectable filesystem case rules', () => {
+  assert.equal(ownershipPathsOverlap('src/Foo', 'src/foo/file.js', true), true);
+  assert.equal(ownershipPathsOverlap('src/Foo', 'src/foo/file.js', false), false);
+  assert.equal(ownershipPathsOverlap('src\\shared', 'src/shared/file.js', false), true);
 });
 test('rejects duplicate ids, missing dependencies, cycles, and unsafe ids', () => {
   assert.throws(() => validateTasks([{ id: 'x', title: 'x', owns: ['x.js'] }, { id: 'x', title: 'duplicate', owns: ['y.js'] }]), /duplicate/);

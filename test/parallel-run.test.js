@@ -43,9 +43,13 @@ test('schedules dependencies, retries within a bound, and persists isolated work
           firstAttemptByTask.set(task.id, attempt);
           if (attempt === 1) {
             onLog('temporary failure');
+            fs.writeFileSync(path.join(worktreePath, 'partial.txt'), 'must be removed on retry');
+            execFileSync('git', ['add', 'partial.txt'], { cwd: worktreePath, stdio: 'ignore' });
+            execFileSync('git', ['commit', '-m', 'partial failed attempt'], { cwd: worktreePath, stdio: 'ignore' });
             await new Promise((resolve) => setTimeout(resolve, 10));
             return { exitCode: 1, output: 'retry this task' };
           }
+          assert.equal(fs.existsSync(path.join(worktreePath, 'partial.txt')), false, 'retry starts from task base');
         }
         await new Promise((resolve) => setTimeout(resolve, 25));
         fs.writeFileSync(path.join(worktreePath, `${task.id}.txt`), `${task.id}\n`);
@@ -107,11 +111,18 @@ test('schedules dependencies, retries within a bound, and persists isolated work
       path.join(__dirname, '..', 'bin', 'titan.js'), 'parallel', 'run',
       '--tasks', 'cli-tasks.json', '--adapter', 'process', '--adapter-module', path.join(__dirname, '..', 'src', 'adapters', 'index.js'),
       '--state-dir', cliStateDir, '--base-ref', 'main', '--cleanup-worktrees',
+      '--allow-process-adapter',
     ], { cwd: repoRoot, encoding: 'utf8' });
     const cliResult = JSON.parse(cliOutput);
     assert.equal(cliResult.status, 'succeeded');
     assert.equal(fs.existsSync(cliResult.results['cli-worker'].worktreePath), false);
     assert.match(execFileSync('git', ['branch', '--list', cliResult.results['cli-worker'].branch], { cwd: repoRoot, encoding: 'utf8' }), /titan\/parallel\//);
+    const fakeDoctorModule = path.join(tempRoot, 'fake-doctor-adapter.js');
+    fs.writeFileSync(fakeDoctorModule, "module.exports = { adapters: { fake: { id: 'fake', async check() { return { exitCode: 0, output: 'available' }; } } } };\n");
+    const doctorOutput = execFileSync(process.execPath, [
+      path.join(__dirname, '..', 'bin', 'titan.js'), 'parallel', 'doctor', '--adapter', 'fake', '--adapter-module', fakeDoctorModule,
+    ], { cwd: repoRoot, encoding: 'utf8' });
+    assert.deepEqual(JSON.parse(doctorOutput), { adapter: 'fake', exitCode: 0, output: 'available' });
     await assert.rejects(runParallel({
       tasks: [{ id: 'retry', title: 'duplicate run ID fixture', owns: ['retry.txt'] }],
       adapters: { fixture: adapter }, adapter: 'fixture', repoRoot, stateDir, runId: 'integration-test',
@@ -128,6 +139,75 @@ test('schedules dependencies, retries within a bound, and persists isolated work
     assert.equal(failedRun.status, 'failed');
     assert.equal(failedRun.results.failure.status, 'failed');
     assert.equal(failedRun.results.blocked.status, 'blocked');
+    assert.ok(fs.existsSync(failedRun.results.failure.worktreePath), 'failed worker worktree remains inspectable');
+
+    let stableCalls = 0;
+    let recoverCalls = 0;
+    const resumeAdapter = { id: 'resume-fixture', async run({ task, worktreePath }) {
+      if (task.id === 'stable') stableCalls++;
+      if (task.id === 'recover' && ++recoverCalls === 1) return { exitCode: 1, output: 'interrupted attempt' };
+      const name = `${task.id}.txt`;
+      fs.writeFileSync(path.join(worktreePath, name), 'ok');
+      execFileSync('git', ['add', name], { cwd: worktreePath, stdio: 'ignore' });
+      execFileSync('git', ['commit', '-m', task.id], { cwd: worktreePath, stdio: 'ignore' });
+      return { exitCode: 0 };
+    } };
+    const resumeTasks = [
+      { id: 'stable', title: 'Stable worker', owns: ['stable.txt'] },
+      { id: 'recover', title: 'Recover worker', owns: ['recover.txt'] },
+    ];
+    const interruptedRun = await runParallel({ tasks: resumeTasks, adapters: { resume: resumeAdapter }, adapter: 'resume', repoRoot, stateDir, baseRef: 'main', maxAttempts: 1, keepWorktrees: false, runId: 'resume-test' });
+    assert.equal(interruptedRun.status, 'failed');
+    const resumedRun = await runParallel({ tasks: resumeTasks, adapters: { resume: resumeAdapter }, adapter: 'resume', repoRoot, stateDir, baseRef: 'main', maxAttempts: 2, keepWorktrees: false, runId: 'resume-test', resume: true });
+    assert.equal(resumedRun.status, 'succeeded');
+    assert.equal(stableCalls, 1, 'resume does not rerun successful tasks');
+    assert.equal(recoverCalls, 2, 'resume continues the failed task within the raised attempt bound');
+
+    const verificationFailure = await runParallel({
+      tasks: [
+        { id: 'verify-fail', title: 'Verification fails', owns: ['verified.txt'], maxAttempts: 1, verificationCommands: [{ command: process.execPath, args: ['-e', 'process.exit(9)'] }] },
+        { id: 'verify-blocked', title: 'Needs verification', owns: ['blocked-verification.txt'], dependsOn: ['verify-fail'] },
+      ],
+      adapters: { resume: { id: 'resume-fixture', async run({ worktreePath }) {
+        fs.writeFileSync(path.join(worktreePath, 'verified.txt'), 'ok');
+        execFileSync('git', ['add', 'verified.txt'], { cwd: worktreePath, stdio: 'ignore' });
+        execFileSync('git', ['commit', '-m', 'verified'], { cwd: worktreePath, stdio: 'ignore' });
+        return { exitCode: 0 };
+      } } },
+      adapter: 'resume', repoRoot, stateDir, baseRef: 'main', maxAttempts: 1, runId: 'verification-test', keepWorktrees: true,
+    });
+    assert.equal(verificationFailure.results['verify-fail'].status, 'failed');
+    assert.equal(verificationFailure.results['verify-blocked'].status, 'blocked');
+
+    const timeoutRun = await runParallel({
+      tasks: [{ id: 'timeout', title: 'Times out', owns: ['timeout.txt'], timeoutMs: 1000 }],
+      adapters: { hang: { id: 'hang', run: ({ signal }) => new Promise((resolve, reject) => signal.addEventListener('abort', () => reject(signal.reason), { once: true })) } },
+      adapter: 'hang', repoRoot, stateDir, baseRef: 'main', keepWorktrees: false, runId: 'timeout-test',
+    });
+    assert.equal(timeoutRun.results.timeout.status, 'timed_out');
+    assert.ok(fs.existsSync(timeoutRun.results.timeout.worktreePath), 'timed-out worktree remains inspectable');
+
+    const cancelController = new AbortController();
+    let startedWorkers = 0;
+    const cancelPromise = runParallel({
+      tasks: [
+        { id: 'cancel-active', title: 'Active task', owns: ['cancel-active.txt'] },
+        { id: 'cancel-pending', title: 'Pending task', owns: ['cancel-pending.txt'] },
+      ],
+      adapters: { cancellable: { id: 'cancellable', run: ({ signal }) => {
+        startedWorkers++;
+        return new Promise((resolve, reject) => signal.addEventListener('abort', () => reject(signal.reason), { once: true }));
+      } } },
+      adapter: 'cancellable', repoRoot, stateDir, baseRef: 'main', concurrency: 1, signal: cancelController.signal,
+      keepWorktrees: false, runId: 'cancel-test',
+    });
+    setTimeout(() => cancelController.abort(new Error('test cancellation')), 30);
+    const cancelRun = await cancelPromise;
+    assert.equal(cancelRun.status, 'cancelled');
+    assert.equal(startedWorkers, 1, 'pending work does not launch after cancellation');
+    assert.equal(cancelRun.results['cancel-active'].status, 'cancelled');
+    assert.equal(cancelRun.results['cancel-pending'].status, 'cancelled');
+    assert.ok(fs.existsSync(cancelRun.results['cancel-active'].worktreePath), 'cancelled worktree remains inspectable');
   } finally {
     const resolvedTemp = path.resolve(tempRoot);
     const resolvedTestDir = path.resolve(__dirname);
